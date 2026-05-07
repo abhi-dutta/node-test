@@ -40,6 +40,7 @@ pipeline:
                     shell: Sh
                     command: |-
                       npm install
+                      npm install mocha-junit-reporter --save-dev
                       npx mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results/junit.xml
                     intelligenceMode: true
                     reports:
