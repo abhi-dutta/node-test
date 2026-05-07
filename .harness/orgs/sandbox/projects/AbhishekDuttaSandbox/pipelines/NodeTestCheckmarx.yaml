@@ -38,15 +38,15 @@ pipeline:
                   identifier: TestI
                   spec:
                     shell: Sh
+                    image: node:20
                     command: |-
-                      npm install 
-                      npm test
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths:
-                          - "**/*.xml"
+                      npm install
+                      npm install --save-dev jest-junit
+                      npx jest --ci --reporters=default --reporters=jest-junit
                     intelligenceMode: true
+                    envVariables:
+                      JEST_JUNIT_OUTPUT_NAME: junit.xml
+                      JEST_JUNIT_OUTPUT_DIR: .
               - parallel:
                   - step:
                       type: HarnessSAST
