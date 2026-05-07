@@ -79,7 +79,7 @@ pipeline:
                           project_name: Node-Test
                       when:
                         stageStatus: Success
-                        condition: <+secrets.getValue("account.Cx_Enabled")> == "true"
+                        condition: <+variable.account.Cx_Enabled> == "true"
         failureStrategies:
           - onFailure:
               errors:
