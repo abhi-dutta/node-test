@@ -47,15 +47,6 @@ pipeline:
                         paths:
                           - "**/*.xml"
                     intelligenceMode: true
-              - step:
-                  type: Run
-                  name: Run Tests
-                  identifier: Run_Tests
-                  spec:
-                    shell: Sh
-                    command: |
-                      npm install
-                      npm test
               - parallel:
                   - step:
                       type: HarnessSAST
