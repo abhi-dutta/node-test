@@ -1,0 +1,92 @@
+pipeline:
+  projectIdentifier: AbhishekDuttaSandbox
+  orgIdentifier: sandbox
+  tags:
+    ai_generated: ""
+  properties:
+    ci:
+      codebase:
+        connectorRef: AbhiGithub
+        repoName: node-test
+        build: <+input>
+  stages:
+    - stage:
+        name: Build
+        identifier: Build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Test
+                  name: TestI
+                  identifier: TestI
+                  spec:
+                    shell: Sh
+                    command: "npm install \nnpm test"
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - '**/*.xml'
+                    intelligenceMode: true
+              - parallel:
+                  - step:
+                      type: HarnessSAST
+                      name: HarnessCode_1
+                      identifier: HarnessCode_1
+                      spec:
+                        target:
+                          detection: auto
+                          type: repository
+                        advanced:
+                          log:
+                            level: info
+                          args: {}
+                        mode: orchestration
+                        config: sast
+                        tool:
+                          target_language: ""
+                          app_name: ""
+                  - step:
+                      type: CheckmarxOne
+                      name: CheckmarxOne_1
+                      identifier: CheckmarxOne_1
+                      spec:
+                        mode: orchestration
+                        config: default
+                        target:
+                          type: repository
+                          detection: auto
+                        advanced:
+                          log:
+                            level: info
+                        auth:
+                          access_token: <+secrets.getValue("account.CX_SECRET_ID")>
+                          type: apiKey
+                        tool:
+                          project_name: Node-Test
+                      when:
+                        stageStatus: Success
+                        condition: <+variable.account.Cx_Enabled> == "true"
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+  identifier: NodeTestCheckmarx_Clone
+  name: NodeTest-Checkmarx - Clone
