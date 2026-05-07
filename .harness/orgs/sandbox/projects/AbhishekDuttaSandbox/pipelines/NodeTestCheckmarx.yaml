@@ -41,11 +41,6 @@ pipeline:
                     command: |-
                       npm install 
                       npm test
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths:
-                          - "**/*.xml"
                     intelligenceMode: true
               - parallel:
                   - step:
