@@ -33,6 +33,21 @@ pipeline:
           execution:
             steps:
               - step:
+                  type: Test
+                  name: TestI
+                  identifier: TestI
+                  spec:
+                    shell: Sh
+                    command: |-
+                      npm install 
+                      npm test
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - "**/*.xml"
+                    intelligenceMode: true
+              - step:
                   type: Run
                   name: Run Tests
                   identifier: Run_Tests
