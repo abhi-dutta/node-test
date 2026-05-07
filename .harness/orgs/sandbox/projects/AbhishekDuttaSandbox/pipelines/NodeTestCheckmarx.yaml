@@ -3,7 +3,8 @@ pipeline:
   identifier: NodeTestCheckmarx
   projectIdentifier: AbhishekDuttaSandbox
   orgIdentifier: sandbox
-  tags: {}
+  tags:
+    ai_generated: ""
   properties:
     ci:
       codebase:
@@ -31,6 +32,15 @@ pipeline:
             spec: {}
           execution:
             steps:
+              - step:
+                  type: Run
+                  name: Run Tests
+                  identifier: Run_Tests
+                  spec:
+                    shell: Sh
+                    command: |
+                      npm install
+                      npm test
               - parallel:
                   - step:
                       type: HarnessSAST
@@ -70,3 +80,9 @@ pipeline:
                       when:
                         stageStatus: Success
                         condition: <+secrets.getValue("account.Cx_Enabled")> == "true"
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
