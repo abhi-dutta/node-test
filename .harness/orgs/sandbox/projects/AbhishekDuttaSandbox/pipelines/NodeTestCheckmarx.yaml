@@ -67,3 +67,6 @@ pipeline:
                           type: apiKey
                         tool:
                           project_name: Node-Test
+                      when:
+                        stageStatus: Success
+                        condition: <+secrets.getValue("account.Cx_Enabled")> == "true"
